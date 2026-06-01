@@ -67,7 +67,7 @@
 </head>
 <body>
     <nav class="navbar">
-        <a href="${pageContext.request.contextPath}/" class="brand">🌧 Rainfall Analysis</a>
+        <a href="${pageContext.request.contextPath}/" class="brand">Rainfall Analysis</a>
         <a href="${pageContext.request.contextPath}/pages/dataset_home.jsp">M3 Import &amp; Data</a>
         <a href="${pageContext.request.contextPath}/pages/analysis.jsp" class="active">M1 &amp; M2 Analysis</a>
         <a href="${pageContext.request.contextPath}/export">M4 Export</a>
@@ -127,7 +127,7 @@
             <div class="grid-2">
                 <!-- M1 Real-Time Live Counter -->
                 <div class="card">
-                    <div class="card-title">📡 Live Running Average (rfh)</div>
+                    <div class="card-title">Live Running Average (rfh)</div>
                     <div class="big-counter" id="m1RunningAvg">—</div>
                     <div class="progress-info" id="m1Progress">Press "Start Real-Time Stream" to begin</div>
                     <div class="progress-bar-wrap">
@@ -137,7 +137,7 @@
 
                 <!-- M1 Stream Log -->
                 <div class="card">
-                    <div class="card-title">📋 Stream Log</div>
+                    <div class="card-title">Stream Log</div>
                     <div class="stream-log" id="m1Log">
                         <div style="color:var(--text-muted);">Waiting for stream...</div>
                     </div>
@@ -170,7 +170,7 @@
                     ▶ Run Batch Analysis
                 </button>
                 <button class="btn btn-success" id="m2RtBtn" onclick="toggleM2Realtime()">
-                    📡 Start Real-Time Stream
+                    Start Real-Time Stream
                 </button>
             </div>
 
@@ -195,7 +195,7 @@
             <div class="grid-2">
                 <!-- M2 Real-Time Violation Counter -->
                 <div class="card">
-                    <div class="card-title">🚨 Live Violation Count</div>
+                    <div class="card-title">Live Violation Count</div>
                     <div class="violation-counter" id="m2LiveCount">0</div>
                     <div class="progress-info" id="m2Progress">Press "Start Real-Time Stream" to begin</div>
                     <div class="progress-bar-wrap">
@@ -205,7 +205,7 @@
 
                 <!-- M2 Violations Stream Log -->
                 <div class="card">
-                    <div class="card-title">📋 Violations Log</div>
+                    <div class="card-title">Violations Log</div>
                     <div class="stream-log" id="m2Log">
                         <div style="color:var(--text-muted);">Waiting for stream...</div>
                     </div>
@@ -321,7 +321,7 @@
                     }
 
                     if (d.error) {
-                        appendLog('m1Log', '❌ Error: ' + d.error, 'log-violation');
+                        appendLog('m1Log', 'Error: ' + d.error, 'log-violation');
                         stopM1();
                         return;
                     }
@@ -435,7 +435,7 @@
                     }
 
                     if (d.error) {
-                        appendLog('m2Log', '❌ Error: ' + d.error, 'log-violation');
+                        appendLog('m2Log', 'Error: ' + d.error, 'log-violation');
                         stopM2();
                         return;
                     }
@@ -449,7 +449,7 @@
                     if (d.seq <= 200) {
                         if (d.isViolation) {
                             appendLog('m2Log',
-                                `🚨 [${d.seq}] ${d.date} | ${d.pcode} | rfh=${d.rfh.toFixed(2)} > ${d.threshold} VIOLATION`,
+                                `[${d.seq}] ${d.date} | ${d.pcode} | rfh=${d.rfh.toFixed(2)} > ${d.threshold} VIOLATION`,
                                 'log-violation');
                         } else if (d.seq % 10 === 0) {
                             // Log every 10th normal record to avoid flooding

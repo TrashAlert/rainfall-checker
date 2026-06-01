@@ -25,7 +25,7 @@
 </head>
 <body>
     <nav class="navbar">
-        <a href="${pageContext.request.contextPath}/" class="brand">🌧 Rainfall Analysis</a>
+        <a href="${pageContext.request.contextPath}/" class="brand">Rainfall Analysis</a>
         <a href="${pageContext.request.contextPath}/pages/dataset_home.jsp">M3 Import &amp; Data</a>
         <a href="${pageContext.request.contextPath}/pages/analysis.jsp">M1 &amp; M2 Analysis</a>
         <a href="${pageContext.request.contextPath}/export" class="active">M4 Export</a>
@@ -40,7 +40,7 @@
         <div class="grid-2">
             <!-- Export Form -->
             <div class="card">
-                <div class="card-title">📥 Generate Report</div>
+                <div class="card-title">Generate Report</div>
 
                 <div class="form-group">
                     <label>Analysis to Export</label>
@@ -79,7 +79,7 @@
 
             <!-- Report Preview Info Card -->
             <div class="card">
-                <div class="card-title">📋 What's Included</div>
+                <div class="card-title">What's Included</div>
                 <table style="font-size:13px; width:100%;">
                     <thead>
                         <tr><th>Module</th><th>Metric</th><th>Source</th></tr>
@@ -112,7 +112,7 @@
 
         <!-- Export History Log -->
         <div class="card">
-            <div class="card-title">🕒 Export History</div>
+            <div class="card-title">Export History</div>
             <c:choose>
                 <c:when test="${empty exportLogs}">
                     <div style="color:var(--text-muted); font-size:13px; padding:20px 0; text-align:center;">
