@@ -121,3 +121,4 @@ Start Tomcat. Access at: `http://<YOUR_IP>:8080/rainfall-app/`
 | Server Error | 500 | MySQL not running |
 
 All errors show `error.jsp` — no raw stack traces visible to user.
+# rainfall-checker
