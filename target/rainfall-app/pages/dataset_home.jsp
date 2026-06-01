@@ -16,7 +16,7 @@
 </head>
 <body>
     <nav class="navbar">
-        <a href="${pageContext.request.contextPath}/" class="brand">Rainfall Analysis</a>
+        <a href="${pageContext.request.contextPath}/" class="brand">🌧 Rainfall Analysis</a>
         <a href="${pageContext.request.contextPath}/pages/dataset_home.jsp" class="active">M3 Import &amp; Data</a>
         <a href="${pageContext.request.contextPath}/pages/analysis.jsp">M1 &amp; M2 Analysis</a>
         <a href="${pageContext.request.contextPath}/export">M4 Export</a>
@@ -29,7 +29,7 @@
         <div class="grid-2">
             <!-- Upload Card -->
             <div class="card">
-                <div class="card-title">Import CSV Dataset</div>
+                <div class="card-title">📤 Import CSV Dataset</div>
                 <p style="color:var(--text-muted); font-size:13px; margin-bottom:20px;">
                     Upload the Malaysia rainfall CSV file. The system will parse, validate, 
                     and store all valid records. Invalid rows are skipped and counted.
@@ -70,7 +70,7 @@
 
             <!-- Validation Rules Card -->
             <div class="card">
-                <div class="card-title">Preprocessing &amp; Validation Rules</div>
+                <div class="card-title">✅ Preprocessing &amp; Validation Rules</div>
                 <table style="font-size:13px;">
                     <thead>
                         <tr>
@@ -116,7 +116,7 @@
                 <div style="margin-top:20px;">
                     <a href="${pageContext.request.contextPath}/dataset"
                        class="btn btn-ghost">
-                        Browse Existing Records →
+                        📋 Browse Existing Records →
                     </a>
                 </div>
             </div>

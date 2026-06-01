@@ -71,7 +71,7 @@
 <body>
     <!-- Navigation -->
     <nav class="navbar">
-        <a href="${pageContext.request.contextPath}/" class="brand">Rainfall Analysis</a>
+        <a href="${pageContext.request.contextPath}/" class="brand">🌧 Rainfall Analysis</a>
         <a href="${pageContext.request.contextPath}/pages/dataset_home.jsp">M3 Import &amp; Data</a>
         <a href="${pageContext.request.contextPath}/pages/analysis.jsp">M1 &amp; M2 Analysis</a>
         <a href="${pageContext.request.contextPath}/export">M4 Export</a>
