@@ -101,7 +101,7 @@
                     ▶ Run Batch Analysis
                 </button>
                 <button class="btn btn-success" id="m1RtBtn" onclick="toggleM1Realtime()">
-                    📡 Start Real-Time Stream
+                    Start Real-Time Stream
                 </button>
             </div>
 
@@ -354,7 +354,7 @@
         function stopM1() {
             m1Running = false;
             if (m1Source) { m1Source.close(); m1Source = null; }
-            document.getElementById('m1RtBtn').textContent = '📡 Start Real-Time Stream';
+            document.getElementById('m1RtBtn').textContent = 'Start Real-Time Stream';
             document.getElementById('m1RtBtn').className = 'btn btn-success';
         }
 
@@ -465,7 +465,7 @@
             };
 
             m2Source.onerror = function() {
-                appendLog('m2Log', '⚠ Connection error or stream ended.', 'log-violation');
+                appendLog('m2Log', 'Connection error or stream ended.', 'log-violation');
                 stopM2();
             };
         }
@@ -473,7 +473,7 @@
         function stopM2() {
             m2Running = false;
             if (m2Source) { m2Source.close(); m2Source = null; }
-            document.getElementById('m2RtBtn').textContent = '📡 Start Real-Time Stream';
+            document.getElementById('m2RtBtn').textContent = 'Start Real-Time Stream';
             document.getElementById('m2RtBtn').className = 'btn btn-success';
         }
 

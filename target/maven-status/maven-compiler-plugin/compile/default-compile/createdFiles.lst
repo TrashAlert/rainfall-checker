@@ -1,9 +1,0 @@
-com/rainfall/servlet/DatasetServlet.class
-com/rainfall/model/RainfallRecord.class
-com/rainfall/servlet/ImportServlet.class
-com/rainfall/util/DBConnection.class
-com/rainfall/dao/RainfallDAO.class
-com/rainfall/servlet/AnalysisM1Servlet.class
-com/rainfall/servlet/ExportServlet.class
-com/rainfall/servlet/EditServlet.class
-com/rainfall/servlet/AnalysisM2Servlet.class
