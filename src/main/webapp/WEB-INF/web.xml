@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    web.xml — Web Application Deployment Descriptor
+    
+    Purpose:
+      Configures the Java web application for Tomcat.
+      Defines the welcome page and custom error pages for all HTTP error codes.
+      Custom error pages ensure users never see a raw Java stack trace.
+-->
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+         http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+
+    <display-name>Malaysia Rainfall Analysis</display-name>
+
+    <!-- Default page when accessing the root URL -->
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+
+    <!-- ── Custom Error Pages ─────────────────────────────────────────────── -->
+    <!-- These pages are shown to the user instead of raw error text          -->
+
+    <!-- 400 Bad Request — missing or invalid parameters -->
+    <error-page>
+        <error-code>400</error-code>
+        <location>/pages/error.jsp</location>
+    </error-page>
+
+    <!-- 404 Not Found — resource or record does not exist -->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/pages/error.jsp</location>
+    </error-page>
+
+    <!-- 500 Internal Server Error — unhandled server-side exception -->
+    <error-page>
+        <error-code>500</error-code>
+        <location>/pages/error.jsp</location>
+    </error-page>
+
+    <!-- Catch-all for any unhandled Java exceptions -->
+    <error-page>
+        <exception-type>java.lang.Exception</exception-type>
+        <location>/pages/error.jsp</location>
+    </error-page>
+
+</web-app>
