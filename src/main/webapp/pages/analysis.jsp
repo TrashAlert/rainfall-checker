@@ -43,7 +43,7 @@
 </head>
 <body>
     <nav class="navbar">
-        <a href="<%=request.getContextPath()%>/" class="brand">&#127783; Rainfall Analysis</a>
+        <a href="<%=request.getContextPath()%>/" class="brand"> Rainfall Analysis</a>
         <a href="<%=request.getContextPath()%>/pages/dataset_home.jsp">M3 Import &amp; Data</a>
         <a href="<%=request.getContextPath()%>/pages/analysis.jsp" class="active">M1 &amp; M2 Analysis</a>
         <a href="<%=request.getContextPath()%>/export">M4 Export</a>
@@ -68,8 +68,8 @@
         <!-- M1 TAB -->
         <div id="tab-m1" class="tab-content active">
             <div class="mode-row">
-                <button class="btn btn-primary" onclick="runM1Batch()">&#9654; Run Batch Analysis</button>
-                <button class="btn btn-success" id="m1RtBtn" onclick="toggleM1Realtime()">&#128225; Start Real-Time Stream</button>
+                <button class="btn btn-primary" onclick="runM1Batch()">Run Batch Analysis</button>
+                <button class="btn btn-success" id="m1RtBtn" onclick="toggleM1Realtime()">Start Real-Time Stream</button>
             </div>
 
             <div id="m1BatchResult" style="display:none;">
@@ -92,7 +92,7 @@
 
             <div class="grid-2">
                 <div class="card">
-                    <div class="card-title">&#128225; Live Running Average (rfh)</div>
+                    <div class="card-title">Live Running Average (rfh)</div>
                     <div class="big-counter" id="m1RunningAvg">-</div>
                     <div class="progress-info" id="m1Progress">Press Start Real-Time Stream to begin</div>
                     <div class="progress-bar-wrap">
@@ -120,8 +120,8 @@
             </div>
 
             <div class="mode-row">
-                <button class="btn btn-primary" onclick="runM2Batch()">&#9654; Run Batch Analysis</button>
-                <button class="btn btn-success" id="m2RtBtn" onclick="toggleM2Realtime()">&#128225; Start Real-Time Stream</button>
+                <button class="btn btn-primary" onclick="runM2Batch()">Run Batch Analysis</button>
+                <button class="btn btn-success" id="m2RtBtn" onclick="toggleM2Realtime()">Start Real-Time Stream</button>
             </div>
 
             <div id="m2BatchResult" style="display:none;">
@@ -144,7 +144,7 @@
 
             <div class="grid-2">
                 <div class="card">
-                    <div class="card-title">&#128680; Live Violation Count</div>
+                    <div class="card-title">Live Violation Count</div>
                     <div class="violation-counter" id="m2LiveCount">0</div>
                     <div class="progress-info" id="m2Progress">Press Start Real-Time Stream to begin</div>
                     <div class="progress-bar-wrap">
