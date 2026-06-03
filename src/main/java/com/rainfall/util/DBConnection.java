@@ -21,9 +21,9 @@ import java.sql.SQLException;
 public class DBConnection {
 
     // ── Database configuration constants ──────────────────────────────────────
-    private static final String DB_URL  = "jdbc:mysql://localhost:8889/rainfall_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
+    private static final String DB_URL  = "jdbc:mysql://localhost:3306/rainfall_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
 private static final String DB_USER = "root";
-private static final String DB_PASS = "root";
+private static final String DB_PASS = "abc123";
 
     /**
      * getConnection()

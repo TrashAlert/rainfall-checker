@@ -28,7 +28,7 @@
 </head>
 <body>
     <nav class="navbar">
-        <a href="${pageContext.request.contextPath}/" class="brand">Rainfall Analysis</a>
+        <a href="${pageContext.request.contextPath}/" class="brand">🌧 Rainfall Analysis</a>
         <a href="${pageContext.request.contextPath}/pages/dataset_home.jsp">M3 Import &amp; Data</a>
         <a href="${pageContext.request.contextPath}/pages/analysis.jsp">M1 &amp; M2 Analysis</a>
         <a href="${pageContext.request.contextPath}/export">M4 Export</a>
@@ -37,17 +37,30 @@
     <div class="container">
         <div class="page-title">Dataset Browser</div>
         <div class="page-subtitle">
-            Total records: <strong>${totalCount}</strong> 
+            Total records: <strong>${totalCount}</strong>
             &nbsp;|&nbsp; Page ${currentPage} of ${totalPages}
-            &nbsp;|&nbsp; 
+            &nbsp;|&nbsp;
             <a href="${pageContext.request.contextPath}/pages/dataset_home.jsp" style="color:var(--accent)">
-                ↑ Import new CSV
+                &#8593; Import new CSV
             </a>
         </div>
 
         <!-- Status message from previous action (import/delete/edit) -->
         <c:if test="${not empty msg}">
             <div class="alert alert-success">${msg}</div>
+        </c:if>
+
+        <!-- Delete All button — hard-deletes entire dataset -->
+        <c:if test="${totalCount > 0}">
+            <form method="POST"
+                  action="${pageContext.request.contextPath}/dataset"
+                  style="margin-bottom:20px;"
+                  onsubmit="return confirm('WARNING: This will permanently delete ALL ' + '${totalCount}' + ' records from the database. This cannot be undone. Continue?')">
+                <input type="hidden" name="action" value="deleteAll">
+                <button type="submit" class="btn btn-danger">
+                    &#128465; Delete Entire Dataset (${totalCount} records)
+                </button>
+            </form>
         </c:if>
 
         <!-- Search form — filters records by PCODE or date keyword -->

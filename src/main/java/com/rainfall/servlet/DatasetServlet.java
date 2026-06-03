@@ -112,7 +112,20 @@ public class DatasetServlet extends HttpServlet {
         String action = req.getParameter("action");
         String idStr  = req.getParameter("id");
 
-        // Validate that required parameters are present
+        // ── deleteAll does not need a record id — handle it first ─────────────
+        if ("deleteAll".equals(action)) {
+            try {
+                int deleted = dao.deleteAll();
+                resp.sendRedirect(req.getContextPath() +
+                                  "/dataset?msg=All+records+deleted.+" + deleted + "+rows+removed.");
+            } catch (Exception e) {
+                resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                               "Delete all failed: " + e.getMessage());
+            }
+            return;
+        }
+
+        // All other actions require a record id
         if (action == null || idStr == null) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing action or id parameter.");
             return;

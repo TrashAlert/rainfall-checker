@@ -377,6 +377,26 @@ public class RainfallDAO {
         }
     }
 
+    /**
+     * deleteAll()
+     *
+     * Permanently removes ALL rows from the rainfall_data table (hard-delete).
+     * Also clears the import_log table since the dataset is gone.
+     * Per assignment spec, hard-delete is reserved for removing an entire
+     * imported dataset batch — not for individual records.
+     *
+     * @return  Number of rows deleted
+     * @throws  SQLException
+     */
+    public int deleteAll() throws SQLException {
+        try (Connection conn = DBConnection.getConnection();
+             Statement st = conn.createStatement()) {
+            int deleted = st.executeUpdate("DELETE FROM rainfall_data");
+            st.executeUpdate("DELETE FROM import_log");
+            return deleted;
+        }
+    }
+
     // ── PRIVATE HELPERS ───────────────────────────────────────────────────────
 
     /**
