@@ -43,7 +43,7 @@
 </head>
 <body>
     <nav class="navbar">
-        <a href="<%=request.getContextPath()%>/" class="brand"> Rainfall Analysis</a>
+        <a href="<%=request.getContextPath()%>/" class="brand">Rainfall Analysis</a>
         <a href="<%=request.getContextPath()%>/pages/dataset_home.jsp">M3 Import &amp; Data</a>
         <a href="<%=request.getContextPath()%>/pages/analysis.jsp" class="active">M1 &amp; M2 Analysis</a>
         <a href="<%=request.getContextPath()%>/export">M4 Export</a>
@@ -67,6 +67,16 @@
 
         <!-- M1 TAB -->
         <div id="tab-m1" class="tab-content active">
+
+            <!-- Threshold input — same style as M2 -->
+            <div class="card" style="margin-bottom:20px; padding:16px 24px;">
+                <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+                    <label style="margin:0; white-space:nowrap;">Threshold (mm):</label>
+                    <input type="number" id="m1Threshold" value="100" min="0" step="0.1" style="width:120px;">
+                    <small style="color:var(--text-muted);">Used to compare the computed average against — shown in results and stream log.</small>
+                </div>
+            </div>
+
             <div class="mode-row">
                 <button class="btn btn-primary" onclick="runM1Batch()">Run Batch Analysis</button>
                 <button class="btn btn-success" id="m1RtBtn" onclick="toggleM1Realtime()">Start Real-Time Stream</button>
@@ -83,8 +93,8 @@
                         <div class="stat-label">Active Records</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-value" style="color:var(--text-muted);font-size:20px;">100.0 mm</div>
-                        <div class="stat-label">Heavy Rain Threshold</div>
+                        <div class="stat-value" style="color:var(--text-muted);font-size:20px;" id="m1ThresholdDisplay">100.0 mm</div>
+                        <div class="stat-label">Your Threshold</div>
                     </div>
                 </div>
                 <div id="m1BatchMsg" class="alert alert-info" style="display:none;"></div>
@@ -100,7 +110,7 @@
                     </div>
                 </div>
                 <div class="card">
-                    <div class="card-title">&#128203; Stream Log</div>
+                    <div class="card-title">Stream Log</div>
                     <div class="stream-log" id="m1Log">
                         <div style="color:var(--text-muted);">Waiting for stream...</div>
                     </div>
@@ -152,7 +162,7 @@
                     </div>
                 </div>
                 <div class="card">
-                    <div class="card-title">&#128203; Violations Log</div>
+                    <div class="card-title">Violations Log</div>
                     <div class="stream-log" id="m2Log">
                         <div style="color:var(--text-muted);">Waiting for stream...</div>
                     </div>
@@ -197,28 +207,45 @@
          * Displays results in stat cards and a contextual message.
          */
         function runM1Batch() {
+            var threshold = parseFloat(document.getElementById('m1Threshold').value);
+
+            if (isNaN(threshold) || threshold < 0) {
+                alert('Please enter a valid threshold value (0 or greater).');
+                return;
+            }
+
+            var btn = document.querySelector('[onclick="runM1Batch()"]');
+            btn.textContent = 'Running...';
+            btn.disabled = true;
+
             fetch(CTX + '/analysis/m1?mode=batch')
                 .then(function(resp) {
                     if (!resp.ok) throw new Error('Server error: ' + resp.status);
                     return resp.json();
                 })
                 .then(function(data) {
-                    document.getElementById('m1AvgVal').textContent  = data.average.toFixed(4) + ' mm';
-                    document.getElementById('m1CountVal').textContent = data.count.toLocaleString();
-                    document.getElementById('m1BatchResult').style.display = 'block';
+                    document.getElementById('m1AvgVal').textContent          = data.average.toFixed(4) + ' mm';
+                    document.getElementById('m1CountVal').textContent        = data.count.toLocaleString();
+                    document.getElementById('m1ThresholdDisplay').textContent = threshold.toFixed(1) + ' mm';
+                    document.getElementById('m1BatchResult').style.display   = 'block';
 
+                    /* Compare the computed average against the user-set threshold */
                     var msgEl = document.getElementById('m1BatchMsg');
-                    if (data.average > 100) {
-                        msgEl.textContent = 'Average rainfall exceeds 100mm — very heavy rain on average.';
-                        msgEl.className = 'alert alert-error';
+                    if (data.average > threshold) {
+                        msgEl.textContent = 'Average rainfall (' + data.average.toFixed(4) + ' mm) exceeds the threshold of ' + threshold + ' mm.';
+                        msgEl.className   = 'alert alert-error';
                     } else {
-                        msgEl.textContent = 'Average rainfall is below the 100mm threshold.';
-                        msgEl.className = 'alert alert-success';
+                        msgEl.textContent = 'Average rainfall (' + data.average.toFixed(4) + ' mm) is below the threshold of ' + threshold + ' mm.';
+                        msgEl.className   = 'alert alert-success';
                     }
                     msgEl.style.display = 'block';
                 })
                 .catch(function(err) {
                     alert('Batch M1 failed: ' + err.message);
+                })
+                .finally(function() {
+                    btn.textContent = 'Run Batch Analysis';
+                    btn.disabled    = false;
                 });
         }
 
@@ -245,14 +272,30 @@
             document.getElementById('m1RtBtn').className   = 'btn btn-danger';
             document.getElementById('m1Log').innerHTML     = '';
 
-            m1Source = new EventSource(CTX + '/analysis/m1?mode=realtime');
+            var threshold = parseFloat(document.getElementById('m1Threshold').value);
+
+            if (isNaN(threshold) || threshold < 0) {
+                alert('Please enter a valid threshold value.');
+                stopM1();
+                return;
+            }
+
+            appendLog('m1Log', 'Starting stream - threshold: rfh avg compared against ' + threshold + ' mm', 'log-done');
+
+            /* Pass threshold so the server can include it in SSE events for context */
+            m1Source = new EventSource(CTX + '/analysis/m1?mode=realtime&threshold=' + threshold);
 
             m1Source.onmessage = function(event) {
                 try {
                     var d = JSON.parse(event.data);
 
                     if (d.done) {
-                        appendLog('m1Log', 'Stream complete. Processed ' + d.total + ' records.', 'log-done');
+                        /* Show final running average vs threshold comparison */
+                        var finalAvg = parseFloat(document.getElementById('m1RunningAvg').textContent);
+                        var verdict  = finalAvg > threshold
+                            ? ' — ABOVE threshold of ' + threshold + ' mm'
+                            : ' — below threshold of ' + threshold + ' mm';
+                        appendLog('m1Log', 'Stream complete. Processed ' + d.total + ' records.' + verdict, 'log-done');
                         document.getElementById('m1Progress').textContent = 'Complete - ' + d.total + ' records processed';
                         document.getElementById('m1ProgressBar').style.width = '100%';
                         stopM1();
@@ -269,12 +312,15 @@
                     document.getElementById('m1Progress').textContent   =
                         'Record ' + d.seq + ' | ' + d.pcode + ' | rfh: ' + d.rfh.toFixed(2) + ' mm';
 
-                    /* Log first 100 records then show a silence notice */
+                    /* Log first 100 records — mark if individual rfh exceeds threshold */
                     if (d.seq <= 100) {
+                        var over    = d.rfh > threshold;
+                        var logClass = over ? 'log-violation' : 'log-normal';
+                        var marker   = over ? ' [ABOVE THRESHOLD]' : '';
                         appendLog('m1Log',
                             '[' + d.seq + '] ' + d.date + ' | ' + d.pcode +
-                            ' | rfh=' + d.rfh.toFixed(2) + ' | avg=' + d.runningAvg.toFixed(4),
-                            'log-normal');
+                            ' | rfh=' + d.rfh.toFixed(2) + ' | avg=' + d.runningAvg.toFixed(4) + marker,
+                            logClass);
                     } else if (d.seq === 101) {
                         appendLog('m1Log', '... (remaining records streaming silently)', 'log-done');
                     }
