@@ -42,9 +42,14 @@ public class ImportServlet extends HttpServlet {
      *
      * Entry point for the CSV file upload form.
      * Validates that a file was attached, then processes it row by row.
+     * Stops saving records once the user-specified rowLimit is reached.
+     *
+     * Form fields expected:
+     *   csvFile  — the uploaded CSV file
+     *   rowLimit — (optional) max number of valid rows to import; blank = no limit
      *
      * Error responses:
-     *   400 — No file attached or empty file
+     *   400 — No file attached, or rowLimit is not a positive number
      *   500 — Server-side parsing or DB error
      */
     @Override
@@ -62,6 +67,9 @@ public class ImportServlet extends HttpServlet {
         int skippedRows  = 0;
         String filename  = "unknown";
 
+        // -1 means no limit (import everything)
+        int rowLimit = -1;
+
         try {
             // Set up Apache Commons FileUpload to handle the multipart form
             DiskFileItemFactory factory = new DiskFileItemFactory();
@@ -70,12 +78,30 @@ public class ImportServlet extends HttpServlet {
 
             InputStream csvStream = null;
 
-            // Find the file field in the form submission
+            // Loop through all form fields — find the file and the rowLimit value
             for (FileItem item : items) {
+                if (item.isFormField() && item.getFieldName().equals("rowLimit")) {
+                    // Read the rowLimit text field
+                    String limitStr = item.getString().trim();
+                    if (!limitStr.isEmpty()) {
+                        try {
+                            rowLimit = Integer.parseInt(limitStr);
+                            // Reject nonsensical limit values
+                            if (rowLimit < 1) {
+                                resp.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                                               "Row limit must be at least 1.");
+                                return;
+                            }
+                        } catch (NumberFormatException e) {
+                            resp.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                                           "Row limit must be a valid whole number.");
+                            return;
+                        }
+                    }
+                }
                 if (!item.isFormField() && item.getFieldName().equals("csvFile")) {
                     filename  = item.getName();
                     csvStream = item.getInputStream();
-                    break;
                 }
             }
 
@@ -95,6 +121,9 @@ public class ImportServlet extends HttpServlet {
                 if (isHeader) { isHeader = false; continue; }
                 // Skip empty lines
                 if (line.trim().isEmpty()) continue;
+
+                // Stop reading if the import limit has been reached
+                if (rowLimit != -1 && importedRows >= rowLimit) break;
 
                 totalRows++;
 
@@ -118,10 +147,15 @@ public class ImportServlet extends HttpServlet {
             return;
         }
 
+        // Build redirect message — mention limit if one was applied
+        String limitMsg = (rowLimit != -1)
+            ? "+.+Row+limit+of+" + rowLimit + "+applied."
+            : "";
+
         // Redirect back to the dataset browser with a success summary
         resp.sendRedirect(req.getContextPath() +
                           "/dataset?msg=Imported+" + importedRows +
-                          "+records.+Skipped+" + skippedRows + "+invalid+rows.");
+                          "+records.+Skipped+" + skippedRows + "+invalid+rows." + limitMsg);
     }
 
     /**
