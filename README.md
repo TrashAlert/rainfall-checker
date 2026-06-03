@@ -51,10 +51,8 @@ rainfall-app/
 - MySQL 8.x
 
 ### Step 2 — Database Setup
-Open MySQL and run:
-```sql
-SOURCE /path/to/rainfall-app/schema.sql;
-```
+Open MySQL and import `schema.sql` into the database
+
 This creates the `rainfall_db` database and all 3 tables:
 - `rainfall_data` — main dataset table (with `is_active` flag)
 - `import_log`    — tracks CSV import history
@@ -65,17 +63,24 @@ This creates the `rainfall_db` database and all 3 tables:
 cd rainfall-app
 mvn clean package
 ```
-Output: `target/rainfall-app.war`
+The file `target/rainfall-app.war` will be created
 
 ### Step 4 — Deploy to Tomcat
 Copy the WAR to Tomcat's webapps folder:
 ```bash
 cp target/rainfall-app.war /path/to/tomcat/webapps/
 ```
-Start Tomcat. Access at: `http://<YOUR_IP>:8080/rainfall-app/`
+Start Tomcat. 
+```bash
+(tomcat location)/bin/startup.sh
+```
 
-> ⚠ **Presentation requirement**: Use the server's real IP address.  
-> `localhost` is NOT allowed during demonstration.
+Access at: `http://<YOUR_IP>:8080/rainfall-app/`
+
+Stop Tomcat.
+```bash
+(tomcat location)/bin/shutdown.sh
+```
 
 ---
 
