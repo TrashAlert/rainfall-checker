@@ -41,7 +41,7 @@
             &nbsp;|&nbsp; Page ${currentPage} of ${totalPages}
             &nbsp;|&nbsp;
             <a href="${pageContext.request.contextPath}/pages/dataset_home.jsp" style="color:var(--accent)">
-                &#8593; Import new CSV
+                Import new CSV
             </a>
         </div>
 
