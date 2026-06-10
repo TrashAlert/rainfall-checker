@@ -191,7 +191,7 @@ public class AnalysisM2Servlet extends HttpServlet {
                 writer.write(eventData);
                 writer.flush();
 
-                Thread.sleep(50);
+                Thread.sleep(200);
             }
 
             // Final event — stream complete, send totals

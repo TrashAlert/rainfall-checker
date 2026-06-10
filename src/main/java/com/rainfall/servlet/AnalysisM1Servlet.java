@@ -168,8 +168,8 @@ public class AnalysisM1Servlet extends HttpServlet {
                 writer.write(eventData);
                 writer.flush();  // Push the event to the browser immediately
 
-                // 50ms delay between events simulates a live data stream
-                Thread.sleep(50);
+                // 1000ms delay between events simulates a live data stream
+                Thread.sleep(500);
             }
 
             // Signal the frontend that streaming is complete
