@@ -58,7 +58,7 @@
                   onsubmit="return confirm('WARNING: This will permanently delete ALL ' + '${totalCount}' + ' records from the database. This cannot be undone. Continue?')">
                 <input type="hidden" name="action" value="deleteAll">
                 <button type="submit" class="btn btn-danger">
-                    &#128465; Delete Entire Dataset (${totalCount} records)
+                    Delete Entire Dataset (${totalCount} records)
                 </button>
             </form>
         </c:if>
